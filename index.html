@@ -1,0 +1,992 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Swamy's Portfolio</title>
+    <style>
+        :root {
+            --bg-color: #f4f4f4;
+            --text-color: #333;
+            --section-bg: #f4f4f4;
+            --card-bg: white;
+            --nav-bg: #2c3e50;
+            --nav-text: white;
+            --btn-bg: #3498db;
+            --btn-hover: #2980b9;
+            --delete-bg: #e74c3c;
+            --delete-hover: #c0392b;
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #1a1a1a;
+            --text-color: #e0e0e0;
+            --section-bg: #1a1a1a;
+            --card-bg: #2c2c2c;
+            --nav-bg: #1c2526;
+            --nav-text: #e0e0e0;
+            --btn-bg: #1e90ff;
+            --btn-hover: #4682b4;
+            --delete-bg: #ff4040;
+            --delete-hover: #cc3333;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            line-height: 1.6;
+            color: var(--text-color);
+            background: var(--bg-color);
+        }
+
+        nav {
+            background: var(--nav-bg);
+            color: var(--nav-text);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            padding: 1rem 0;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .nav-container h1 {
+            font-size: 1.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--nav-text);
+            text-decoration: none;
+            margin-left: 1.5rem;
+            font-size: 1rem;
+            transition: color 0.3s;
+            cursor: pointer;
+        }
+
+        .nav-links a:hover {
+            color: var(--btn-bg);
+        }
+
+        #theme-toggle {
+            background: var(--btn-bg);
+            color: var(--nav-text);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            margin-left: 1.5rem;
+            transition: background 0.3s;
+        }
+
+        #theme-toggle:hover {
+            background: var(--btn-hover);
+        }
+
+        .section {
+            padding: 5rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            min-height: 100vh;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            background: var(--section-bg);
+        }
+
+        .section.active {
+            display: flex;
+        }
+
+        #about, #contact {
+            background: var(--section-bg);
+        }
+
+        #todo, #products {
+            background: var(--card-bg);
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            color: var(--text-color);
+        }
+
+        .about-content {
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .about-content p, .about-content ul {
+            margin-bottom: 1rem;
+        }
+
+        .about-content ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .about-content li {
+            margin-bottom: 0.5rem;
+        }
+
+        .projects-section {
+            margin-top: 3rem;
+            text-align: left;
+        }
+
+        .projects-section h3 {
+            color: var(--text-color);
+            margin-bottom: 1.5rem;
+            text-align: center;
+            font-size: 1.8rem;
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .project-card {
+            background: var(--card-bg);
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .project-card h4 {
+            color: var(--btn-bg);
+            margin-bottom: 0.5rem;
+            font-size: 1.2rem;
+        }
+
+        .project-card p {
+            margin-bottom: 0.8rem;
+            text-align: left;
+        }
+
+        .project-tech {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .tech-tag {
+            background: var(--btn-bg);
+            color: white;
+            padding: 0.2rem 0.6rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .project-link {
+            display: inline-block;
+            margin-top: 1rem;
+            color: var(--btn-bg);
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+
+        .project-link:hover {
+            color: var(--btn-hover);
+        }
+
+        /* To-Do List Styles */
+        .todo-container {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        #task-input {
+            flex: 1;
+            padding: 0.75rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 1rem;
+            min-width: 200px;
+        }
+
+        #task-category {
+            padding: 0.75rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 1rem;
+            min-width: 150px;
+        }
+
+        .filter-group {
+            margin-bottom: 1rem;
+        }
+
+        .filter-group label {
+            margin-right: 0.5rem;
+        }
+
+        #task-filter {
+            padding: 0.75rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            background: var(--btn-bg);
+            color: var(--nav-text);
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background 0.3s;
+        }
+
+        .btn:hover {
+            background: var(--btn-hover);
+        }
+
+        .task-list {
+            list-style: none;
+        }
+
+        .task-item {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .task-item.completed span {
+            text-decoration: line-through;
+            color: #777;
+        }
+
+        .task-item input[type="checkbox"] {
+            margin-right: 1rem;
+        }
+
+        .task-item span {
+            flex: 1;
+        }
+
+        .task-item button {
+            background: var(--delete-bg);
+            color: var(--nav-text);
+            border: none;
+            padding: 0.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .task-item button:hover {
+            background: var(--delete-hover);
+        }
+
+        /* Product Listing Styles */
+        .filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            background: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .filter-group {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .filter-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+
+        .filter-group select,
+        .filter-group input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        #search-input {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .product-card {
+            background: var(--card-bg);
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            padding: 1.5rem;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .product-card img {
+            width: 100%;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .product-card h3 {
+            margin-bottom: 0.5rem;
+            color: var(--text-color);
+        }
+
+        .product-card p {
+            color: #777;
+            margin-bottom: 0.5rem;
+        }
+
+        .product-card .price {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--btn-bg);
+        }
+
+        .product-card .rating {
+            color: #f39c12;
+        }
+
+        /* Contact Form Styles */
+        .contact-form {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 150px;
+        }
+
+        .error {
+            color: red;
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+            display: none;
+        }
+
+        .success-message {
+            display: none;
+            background: #2ecc71;
+            color: white;
+            padding: 1rem;
+            border-radius: 4px;
+            margin-top: 1rem;
+            text-align: center;
+            font-size: 1rem;
+        }
+
+        .success-message.visible {
+            display: block;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-links {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .nav-links a, #theme-toggle {
+                margin: 0.5rem 0;
+            }
+
+            .section {
+                padding: 4rem 1rem;
+            }
+
+            h2 {
+                font-size: 2rem;
+            }
+
+            .filters {
+                flex-direction: column;
+            }
+
+            .product-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .input-group {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <h1>Swamy's Portfolio</h1>
+            <div class="nav-links">
+                <a onclick="showSection('about')">About</a>
+                <a onclick="showSection('todo')">To-Do List</a>
+                <a onclick="showSection('products')">Products</a>
+                <a onclick="showSection('contact')">Contact</a>
+                <button id="theme-toggle">Toggle Dark Mode</button>
+            </div>
+        </div>
+    </nav>
+
+    <section id="about" class="section active">
+        <h2>About Me</h2>
+        <div class="about-content">
+            <p>Hello, I'm Swamy, a passionate web developer with a Master of Computer Applications (MCA) degree. I specialize in creating responsive and user-friendly websites using HTML, CSS, and JavaScript.</p>
+            <p><strong>Education:</strong> Master of Computer Applications (MCA)</p>
+            <p><strong>Interests:</strong></p>
+            <ul>
+                <li>Reading books</li>
+                <li>Watching movies</li>
+                <li>Coding</li>
+            </ul>
+            <p><strong>Known Languages:</strong></p>
+            <ul>
+                <li>C</li>
+                <li>Java</li>
+                <li>Python</li>
+            </ul>
+            
+            <div class="projects-section">
+                <h3>Featured Projects</h3>
+                <div class="projects-grid">
+                    <div class="project-card">
+                        <h4>🗒️ Smart To-Do Manager</h4>
+                        <p>A dynamic task management application with category filtering, completion tracking, and responsive design. Features include task categorization, real-time filtering, and local data persistence.</p>
+                        <div class="project-tech">
+                            <span class="tech-tag">HTML5</span>
+                            <span class="tech-tag">CSS3</span>
+                            <span class="tech-tag">JavaScript</span>
+                            <span class="tech-tag">Responsive Design</span>
+                        </div>
+                        <a href="#" class="project-link" onclick="showSection('todo')">View Live Demo →</a>
+                    </div>
+                    
+                    <div class="project-card">
+                        <h4>🛍️ E-Commerce Product Catalog</h4>
+                        <p>An interactive product listing system with advanced filtering, search functionality, and sorting options. Includes real-time search, price filtering, and category-based organization.</p>
+                        <div class="project-tech">
+                            <span class="tech-tag">JavaScript</span>
+                            <span class="tech-tag">CSS Grid</span>
+                            <span class="tech-tag">API Integration</span>
+                            <span class="tech-tag">Responsive UI</span>
+                        </div>
+                        <a href="#" class="project-link" onclick="showSection('products')">View Live Demo →</a>
+                    </div>
+                    
+                    <div class="project-card">
+                        <h4>📱 Portfolio Website</h4>
+                        <p>A modern, responsive portfolio website featuring dark/light theme toggle, smooth navigation, form validation, and interactive components. Built with semantic HTML and modern CSS techniques.</p>
+                        <div class="project-tech">
+                            <span class="tech-tag">HTML5</span>
+                            <span class="tech-tag">CSS3</span>
+                            <span class="tech-tag">JavaScript</span>
+                            <span class="tech-tag">Theme Toggle</span>
+                        </div>
+                        <a href="#" class="project-link" onclick="showSection('contact')">Contact Me →</a>
+                    </div>
+                </div>
+            </div>
+            
+            <p style="margin-top: 2rem; text-align: center;"><strong>Explore my interactive projects above to see my work in action!</strong></p>
+        </div>
+    </section>
+
+    <section id="todo" class="section">
+        <h2>To-Do List App</h2>
+        <div class="todo-container">
+            <div class="input-group">
+                <input type="text" id="task-input" placeholder="Add a new task">
+                <select id="task-category">
+                    <option value="Work">Work</option>
+                    <option value="Personal">Personal</option>
+                    <option value="Other">Other</option>
+                </select>
+                <button class="btn" onclick="addTask()">Add</button>
+            </div>
+            <div class="filter-group">
+                <label for="task-filter">Filter by Category:</label>
+                <select id="task-filter" onchange="filterTasks()">
+                    <option value="all">All</option>
+                    <option value="Work">Work</option>
+                    <option value="Personal">Personal</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+            <ul class="task-list" id="task-list"></ul>
+        </div>
+    </section>
+
+    <section id="products" class="section">
+        <h2>Product Listing</h2>
+        <div class="filters">
+            <div class="filter-group">
+                <label for="search-input">Search</label>
+                <input type="text" id="search-input" placeholder="Search products" oninput="filterProducts()">
+            </div>
+            <div class="filter-group">
+                <label for="category">Category</label>
+                <select id="category" onchange="filterProducts()">
+                    <option value="all">All</option>
+                    <option value="electronics">Electronics</option>
+                    <option value="clothing">Clothing</option>
+                    <option value="books">Books</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label for="price">Max Price</label>
+                <input type="number" id="price" min="0" placeholder="Enter max price" oninput="filterProducts()">
+            </div>
+            <div class="filter-group">
+                <label for="sort">Sort By</label>
+                <select id="sort" onchange="filterProducts()">
+                    <option value="none">None</option>
+                    <option value="price-asc">Price: Low to High</option>
+                    <option value="price-desc">Price: High to Low</option>
+                    <option value="rating-desc">Rating: High to Low</option>
+                </select>
+            </div>
+        </div>
+        <div class="product-grid" id="product-grid"></div>
+    </section>
+
+    <section id="contact" class="section">
+        <h2>Contact Me</h2>
+        <form id="contact-form" class="contact-form">
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" id="name" name="name" required>
+                <div class="error" id="name-error">Please enter your name.</div>
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required>
+                <div class="error" id="email-error">Please enter a valid email.</div>
+            </div>
+            <div class="form-group">
+                <label for="message">Message</label>
+                <textarea id="message" name="message" required></textarea>
+                <div class="error" id="message-error">Please enter a message.</div>
+            </div>
+            <button type="submit" class="btn">Send Message</button>
+            <div id="success-message" class="success-message">Message submitted successfully! Thank you for contacting me.</div>
+        </form>
+    </section>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM fully loaded at', new Date().toISOString());
+
+            // Theme Toggle
+            const toggleButton = document.getElementById('theme-toggle');
+            const html = document.documentElement;
+            
+            // Use in-memory storage instead of localStorage
+            let currentTheme = 'light';
+            html.setAttribute('data-theme', currentTheme);
+            
+            if (toggleButton) {
+                toggleButton.addEventListener('click', () => {
+                    currentTheme = currentTheme === 'light' ? 'dark' : 'light';
+                    html.setAttribute('data-theme', currentTheme);
+                    console.log('Theme switched to:', currentTheme);
+                });
+            } else {
+                console.error('Theme toggle button not found');
+            }
+
+            // Section navigation
+            window.showSection = function(sectionId) {
+                console.log('Attempting to show section:', sectionId);
+                const sections = document.querySelectorAll('.section');
+                if (!sections || sections.length === 0) {
+                    console.error('No sections found in DOM');
+                    return;
+                }
+                sections.forEach(section => {
+                    if (section) {
+                        section.classList.remove('active');
+                    }
+                });
+                const targetSection = document.getElementById(sectionId);
+                if (targetSection) {
+                    targetSection.classList.add('active');
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                    console.log('Section shown:', sectionId);
+                } else {
+                    console.error(`Section with ID ${sectionId} not found`);
+                }
+            };
+
+            // To-Do List JavaScript
+            let tasks = [];
+
+            window.renderTasks = function(filterCategory = 'all') {
+                const taskList = document.getElementById('task-list');
+                if (!taskList) {
+                    console.error('Task list element not found');
+                    return;
+                }
+                console.log('Rendering tasks:', tasks.length, 'Filter:', filterCategory);
+                taskList.innerHTML = '';
+                tasks.forEach((task, index) => {
+                    if (task && typeof task.text === 'string' && typeof task.category === 'string') {
+                        if (filterCategory === 'all' || task.category === filterCategory) {
+                            const li = document.createElement('li');
+                            li.className = `task-item ${task.completed ? 'completed' : ''}`;
+                            li.innerHTML = `
+                                <input type="checkbox" ${task.completed ? 'checked' : ''} onclick="toggleTask(${index})">
+                                <span>[${task.category}] ${task.text}</span>
+                                <button onclick="deleteTask(${index})">Delete</button>
+                            `;
+                            taskList.appendChild(li);
+                        }
+                    } else {
+                        console.warn('Invalid task at index:', index);
+                    }
+                });
+            };
+
+            window.addTask = function() {
+                const input = document.getElementById('task-input');
+                const categorySelect = document.getElementById('task-category');
+                if (!input || !categorySelect) {
+                    console.error('Task input or category select not found');
+                    return;
+                }
+                const text = input.value.trim();
+                const category = categorySelect.value;
+                if (text) {
+                    tasks.push({ text, category, completed: false });
+                    input.value = '';
+                    console.log('Task added:', text, 'Category:', category);
+                    renderTasks();
+                }
+            };
+
+            window.toggleTask = function(index) {
+                if (index >= 0 && index < tasks.length) {
+                    tasks[index].completed = !tasks[index].completed;
+                    console.log('Task toggled at index:', index);
+                    renderTasks();
+                } else {
+                    console.error(`Invalid task index: ${index}`);
+                }
+            };
+
+            window.deleteTask = function(index) {
+                if (index >= 0 && index < tasks.length) {
+                    const deletedTask = tasks.splice(index, 1);
+                    console.log('Task deleted:', deletedTask);
+                    renderTasks();
+                } else {
+                    console.error(`Invalid task index: ${index}`);
+                }
+            };
+
+            window.filterTasks = function() {
+                const filterSelect = document.getElementById('task-filter');
+                if (!filterSelect) {
+                    console.error('Task filter select not found');
+                    return;
+                }
+                const filterCategory = filterSelect.value;
+                console.log('Filtering tasks by:', filterCategory);
+                renderTasks(filterCategory);
+            };
+
+            const taskInput = document.getElementById('task-input');
+            if (taskInput) {
+                taskInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        console.log('Enter key pressed on task input');
+                        addTask();
+                    }
+                });
+            } else {
+                console.error('Task input element not found for keypress event');
+            }
+
+            // Product Listing JavaScript with real images
+            const products = [
+                { 
+                    id: 1, 
+                    name: 'iPhone 15 Pro', 
+                    category: 'electronics', 
+                    price: 999, 
+                    rating: 4.8, 
+                    image: 'https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=300&h=200&fit=crop'
+                },
+                { 
+                    id: 2, 
+                    name: 'Cotton T-Shirt', 
+                    category: 'clothing', 
+                    price: 29, 
+                    rating: 4.2, 
+                    image: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=300&h=200&fit=crop'
+                },
+                { 
+                    id: 3, 
+                    name: 'The Great Gatsby', 
+                    category: 'books', 
+                    price: 15, 
+                    rating: 4.5, 
+                    image: 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=300&h=200&fit=crop'
+                },
+                { 
+                    id: 4, 
+                    name: 'MacBook Pro M3', 
+                    category: 'electronics', 
+                    price: 1999, 
+                    rating: 4.9, 
+                    image: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=300&h=200&fit=crop'
+                },
+                { 
+                    id: 5, 
+                    name: 'Denim Jeans', 
+                    category: 'clothing', 
+                    price: 79, 
+                    rating: 4.0, 
+                    image: 'https://images.unsplash.com/photo-1542272604-787c3835535d?w=300&h=200&fit=crop'
+                },
+                { 
+                    id: 6, 
+                    name: 'Programming Textbook', 
+                    category: 'books', 
+                    price: 89, 
+                    rating: 4.3, 
+                    image: 'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=300&h=200&fit=crop'
+                },
+                { 
+                    id: 7, 
+                    name: 'Wireless Headphones', 
+                    category: 'electronics', 
+                    price: 199, 
+                    rating: 4.6, 
+                    image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=300&h=200&fit=crop'
+                },
+                { 
+                    id: 8, 
+                    name: 'Casual Hoodie', 
+                    category: 'clothing', 
+                    price: 59, 
+                    rating: 4.1, 
+                    image: 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=300&h=200&fit=crop'
+                }
+            ];
+
+            window.renderProducts = function(productArray) {
+                const grid = document.getElementById('product-grid');
+                if (!grid) {
+                    console.error('Product grid element not found');
+                    return;
+                }
+                console.log('Rendering products:', productArray.length);
+                grid.innerHTML = '';
+                productArray.forEach(product => {
+                    if (product && product.name && product.image) {
+                        const card = document.createElement('div');
+                        card.className = 'product-card';
+                        card.innerHTML = `
+                            <img src="${product.image}" alt="${product.name}" onerror="this.src='https://via.placeholder.com/300x200/ddd/666?text=Image+Not+Found'">
+                            <h3>${product.name}</h3>
+                            <p>Category: ${product.category.charAt(0).toUpperCase() + product.category.slice(1)}</p>
+                            <p class="price">$${product.price}</p>
+                            <p class="rating">⭐ ${product.rating}/5</p>
+                        `;
+                        grid.appendChild(card);
+                    } else {
+                        console.warn('Invalid product data:', product);
+                    }
+                });
+            };
+
+            window.filterProducts = function() {
+                const searchInput = document.getElementById('search-input');
+                const categorySelect = document.getElementById('category');
+                const priceInput = document.getElementById('price');
+                const sortSelect = document.getElementById('sort');
+                if (!searchInput || !categorySelect || !priceInput || !sortSelect) {
+                    console.error('Filter elements not found');
+                    return;
+                }
+
+                const search = searchInput.value.trim().toLowerCase();
+                const category = categorySelect.value;
+                const maxPrice = parseFloat(priceInput.value) || Infinity;
+                const sort = sortSelect.value;
+                console.log('Filtering products - Search:', search, 'Category:', category, 'Max Price:', maxPrice, 'Sort:', sort);
+
+                let filtered = products.filter(product => {
+                    return product.name.toLowerCase().includes(search) &&
+                           (category === 'all' || product.category === category) &&
+                           product.price <= maxPrice;
+                });
+
+                if (sort === 'price-asc') {
+                    filtered.sort((a, b) => a.price - b.price);
+                } else if (sort === 'price-desc') {
+                    filtered.sort((a, b) => b.price - a.price);
+                } else if (sort === 'rating-desc') {
+                    filtered.sort((a, b) => b.rating - a.rating);
+                }
+
+                renderProducts(filtered);
+            };
+
+            // Contact Form JavaScript
+            const form = document.getElementById('contact-form');
+            if (form) {
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    console.log('Contact form submitted');
+                    let isValid = true;
+
+                    const name = document.getElementById('name');
+                    const email = document.getElementById('email');
+                    const message = document.getElementById('message');
+                    const successMessage = document.getElementById('success-message');
+
+                    const nameError = document.getElementById('name-error');
+                    const emailError = document.getElementById('email-error');
+                    const messageError = document.getElementById('message-error');
+
+                    if (nameError) nameError.style.display = 'none';
+                    if (emailError) emailError.style.display = 'none';
+                    if (messageError) messageError.style.display = 'none';
+                    if (successMessage) successMessage.classList.remove('visible');
+
+                    if (!name || !name.value.trim()) {
+                        if (nameError) nameError.style.display = 'block';
+                        isValid = false;
+                        console.error('Invalid name input');
+                    }
+
+                    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    if (!email || !emailPattern.test(email.value)) {
+                        if (emailError) emailError.style.display = 'block';
+                        isValid = false;
+                        console.error('Invalid email input');
+                    }
+
+                    if (!message || !message.value.trim()) {
+                        if (messageError) messageError.style.display = 'block';
+                        isValid = false;
+                        console.error('Invalid message input');
+                    }
+
+                    if (isValid) {
+                        if (successMessage) {
+                            successMessage.classList.add('visible');
+                            setTimeout(() => {
+                                if (successMessage) successMessage.classList.remove('visible');
+                            }, 5000);
+                        }
+                        form.reset();
+                        console.log('Form submission successful');
+                    }
+                });
+            } else {
+                console.error('Contact form element not found');
+            }
+
+            // Initialize
+            console.log('Initializing portfolio components');
+            try {
+                renderTasks();
+                renderProducts(products);
+                showSection('about');
+            } catch (error) {
+                console.error('Initialization error:', error);
+            }
+        });
+    </script>
+</body>
+</html>
